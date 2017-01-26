@@ -14,7 +14,7 @@
                                    class="btn btn-success app-action-btn" target="_blank">GoTo</a>
                             @elseif($user_app-> launched == 0)
                                 <a data-key="{{ $user_app->id }}" href="#"
-                                   class="btn btn-success app-action-btn">Launch</a>
+                                   class="btn btn-success app-action-btn btn-app-launch">Launch</a>
                             @endif
                         </div>
                     @endforeach
@@ -39,11 +39,13 @@
     </div>
 
     <script>
-        $('#1').click(function () {
+        $('a.btn-app-launch').click(function () {
             $(this).text("Please Wait...");
-            $.post("api/create_user_instance.php",
+
+            $.post("{{url('instance/create')}}",
                     {
-                        username: 1
+                        app_id: $(this).data('key'),
+                        _token: "{{ csrf_token() }}"
                     },
                     function (data, status) {
                         //alert("Data: " + data + "\nStatus: " + status);

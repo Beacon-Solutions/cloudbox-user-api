@@ -33,10 +33,4 @@ Route::get('/users/get/{id}', ['uses' => 'UserController@getUser']);
 
 Route::post('/users/update/', ['uses' => 'UserController@updateUser']);
 
-Route::get('/wel', function () {
-    return view('welcome');
-});
-
-Route::get('/test', function () {
-    return "geg";
-});
+Route::post('instance/create',['uses' => 'InstanceController@createInstance']);

@@ -68,6 +68,23 @@ class UserController extends Controller
             ]);
         }
 
+        $ldap = ldap_connect("localhost");
+
+        if (isset($ldap)) {
+            ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+            if ($bind = ldap_bind($ldap, "cn=admin,dc=cloudbox,dc=com", "admin")) {
+                $info["cn"] = $fullName;
+                $names = explode(" ", $fullName);
+                $info["sn"] = array_pop($names);
+                $info["uid"] = $userName;
+                $info["objectclass"] = array("top","person", "uidObject");
+                $info['userPassword'] = $password;
+                ldap_add($ldap, "uid=$userName, dc=cloudbox,dc=com", $info);
+                ldap_close($ldap);
+            }
+        }
+
         return response()->json([
             'error' => false,
             'msg' => 'success'

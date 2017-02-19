@@ -13,11 +13,11 @@
 
 Route::get('/', ['uses' => 'HomeController@index']);
 
-Route::get('/login',['uses' => 'AuthController@login']);
+Route::get('/login', ['uses' => 'AuthController@login']);
 
-Route::post('/login',['uses' => 'AuthController@auth']);
+Route::post('/login', ['uses' => 'AuthController@auth']);
 
-Route::get('/logout',['uses' => 'AuthController@logout']);
+Route::get('/logout', ['uses' => 'AuthController@logout']);
 
 Route::get('/dashboard/overview', ['uses' => 'DashboardController@overview']);
 
@@ -33,4 +33,8 @@ Route::get('/users/get/{id}', ['uses' => 'UserController@getUser']);
 
 Route::post('/users/update/', ['uses' => 'UserController@updateUser']);
 
-Route::post('instance/create',['uses' => 'InstanceController@createInstance']);
+Route::get('/users/profile', ['uses' => 'UserController@profile']);
+
+Route::post('/users/update/profile', ['uses' => 'UserController@updateProfile']);
+
+Route::post('instance/create', ['uses' => 'InstanceController@createInstance']);

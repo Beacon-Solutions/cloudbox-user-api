@@ -78,7 +78,7 @@ class UserController extends Controller
                 $names = explode(" ", $fullName);
                 $info["sn"] = array_pop($names);
                 $info["uid"] = $userName;
-                $info["objectclass"] = array("top","person", "uidObject");
+                $info["objectclass"] = array("top", "person", "uidObject");
                 $info['userPassword'] = $password;
                 ldap_add($ldap, "uid=$userName, dc=cloudbox,dc=com", $info);
                 ldap_close($ldap);
@@ -161,5 +161,104 @@ class UserController extends Controller
             'error' => false,
             'msg' => 'success'
         ]);
+    }
+
+    public function profile()
+    {
+
+        $user = \DB::table('user')->where('id', session('id'))->first();
+
+        if (!isset($user)) {
+            return response('', 204);
+        }
+
+
+        $userData = [
+            'user_id' => $user->id,
+            'username' => $user->username,
+            'full_name' => $user->full_name,
+            'position' => $user->position
+        ];
+
+        return view('dashboard.profile', compact('userData'));
+    }
+
+    public function updateProfile()
+    {
+
+        $userID = request()->input('user_id');
+        $fullName = request()->input('full_name');
+        $currentPassword = request()->input('current_password');
+        $newPassword = request()->input('new_password');
+        $confirmNewPassword = request()->input('confirm_new_password');
+
+        $user = \DB::table('user')->where('id', $userID)->first();
+
+        if (!isset($user)) {
+            return response()->json([
+                'error' => true,
+                'msg' => 'No matching user.'
+            ]);
+        }
+
+        if (strcasecmp($user->password, $currentPassword) != 0) {
+            return response()->json([
+                'error' => true,
+                'msg' => 'Update failed. Wrong password.'
+            ]);
+        }
+
+        if (!isset($fullName) || trim($fullName) === '') {
+            return response()->json([
+                'error' => true,
+                'msg' => 'Full name cannot be empty.'
+            ]);
+        }
+
+        $updatePassword = false;
+
+        if ((isset($newPassword) && trim($newPassword) != '') || (isset($confirmNewPassword) && trim($confirmNewPassword) != '')) {
+            if (strcasecmp($newPassword, $confirmNewPassword) != 0) {
+                return response()->json([
+                    'error' => true,
+                    'msg' => 'New password confirmation failed.'
+                ]);
+            }
+            $updatePassword = true;
+        }
+
+        $success = false;
+        if ($updatePassword) {
+            $success = \DB::table('user')->where('id', $user->id)->update(['full_name' => $fullName, 'password' => $newPassword]);
+        } else {
+            $success = \DB::table('user')->where('id', $user->id)->update(['full_name' => $fullName]);
+        }
+
+        if ($success) {
+
+            $ldap = ldap_connect("localhost");
+
+            if (isset($ldap)) {
+                ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+                if ($bind = ldap_bind($ldap, "cn=admin,dc=cloudbox,dc=com", "admin")) {
+                    $info["cn"] = $fullName;
+                    $names = explode(" ", $fullName);
+                    $info["sn"] = array_pop($names);
+                    $info['userPassword'] = $newPassword;
+                    ldap_modify($ldap, "uid=$user->username, dc=cloudbox,dc=com", $info);
+                    ldap_close($ldap);
+                }
+            }
+
+            $updatedUser = \DB::table('user')->where('id', $userID)->first();
+            session(['full_name' => $updatedUser->full_name]);
+        }
+
+        return response()->json([
+            'error' => false,
+            'msg' => 'Update Success.'
+        ]);
+
     }
 }

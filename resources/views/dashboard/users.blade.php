@@ -125,9 +125,9 @@
 
         $('.btn-manage-user').click(function () {
             var id = $(this).data('key');
-            $('#ajaxUserManage').load('{{url('/users/get')}}' +'/' + id, function(response, status, xhr) {
+            $('#ajaxUserManage').load('{{url('/users/get')}}' + '/' + id, function (response, status, xhr) {
 
-                if(xhr.status == 200){
+                if (xhr.status == 200) {
                     $('#modelManageUser').modal('show');
                 }
             });

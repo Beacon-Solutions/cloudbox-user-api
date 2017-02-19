@@ -6,6 +6,10 @@ namespace App\Http\Controllers;
 class UserController extends Controller
 {
 
+    private $ldapDomain = "localhost";
+    private $ldapAdmin = "cn=admin,dc=cloudbox,dc=com";
+    private $ldapAdminPass = "admin";
+
     public function addUser()
     {
 
@@ -68,12 +72,12 @@ class UserController extends Controller
             ]);
         }
 
-        $ldap = ldap_connect("localhost");
+        $ldap = ldap_connect($this->ldapDomain);
 
         if (isset($ldap)) {
             ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-            if ($bind = ldap_bind($ldap, "cn=admin,dc=cloudbox,dc=com", "admin")) {
+            if ($bind = ldap_bind($ldap, $this->ldapAdmin, $this->ldapAdminPass)) {
                 $info["cn"] = $fullName;
                 $names = explode(" ", $fullName);
                 $info["sn"] = array_pop($names);
@@ -236,12 +240,12 @@ class UserController extends Controller
 
         if ($success) {
 
-            $ldap = ldap_connect("localhost");
+            $ldap = ldap_connect($this->ldapDomain);
 
             if (isset($ldap)) {
                 ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-                if ($bind = ldap_bind($ldap, "cn=admin,dc=cloudbox,dc=com", "admin")) {
+                if ($bind = ldap_bind($ldap, $this->ldapAdmin, $this->ldapAdminPass)) {
                     $info["cn"] = $fullName;
                     $names = explode(" ", $fullName);
                     $info["sn"] = array_pop($names);

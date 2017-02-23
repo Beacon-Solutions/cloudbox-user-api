@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+// controller class fpr user management
 class UserController extends Controller
 {
 
@@ -56,7 +56,7 @@ class UserController extends Controller
         \DB::table('user')->insert(
             [
                 'username' => $userName,
-                'password' => $password,
+                'password' => \Hash::make($password),
                 'full_name' => $fullName,
                 'role' => 2,
                 'position' => $position
@@ -187,6 +187,7 @@ class UserController extends Controller
         return view('dashboard.profile', compact('userData'));
     }
 
+    // updates user profile
     public function updateProfile()
     {
 
@@ -205,7 +206,7 @@ class UserController extends Controller
             ]);
         }
 
-        if (strcasecmp($user->password, $currentPassword) != 0) {
+        if (!\Hash::check($currentPassword,$user->password)) {
             return response()->json([
                 'error' => true,
                 'msg' => 'Update failed. Wrong password.'
@@ -233,7 +234,7 @@ class UserController extends Controller
 
         $success = false;
         if ($updatePassword) {
-            $success = \DB::table('user')->where('id', $user->id)->update(['full_name' => $fullName, 'password' => $newPassword]);
+            $success = \DB::table('user')->where('id', $user->id)->update(['full_name' => $fullName, 'password' => \Hash::make($newPassword)]);
         } else {
             $success = \DB::table('user')->where('id', $user->id)->update(['full_name' => $fullName]);
         }
@@ -264,5 +265,52 @@ class UserController extends Controller
             'msg' => 'Update Success.'
         ]);
 
+    }
+
+    public function resetPassword()
+    {
+
+        $username = request()->input('recover_username');
+
+        $user = \DB::table('user')->where('username', $username)->first();
+
+        if (isset($user)) {
+            $generatedPassword = \Hash::make($this->generatePassword(12));
+
+            \DB::table('user')->where('id', $user->id)->update(['password' => $generatedPassword]);
+
+            $endPointProvider = 'http://104.236.82.72/';
+
+            $client = new \GuzzleHttp\Client();
+
+            \Log::info("Password reset successful");
+
+//            $res = $client->post($endPointProvider . 'postPerformance',
+//                [
+//                    'form_params' => [
+//                        'client_id' => '2',
+//                        'client_cpu_usage' => $cpuPercent,
+//                        'client_memory_usage' => $memPercent,
+//                        'client_storage_usage' => $storagePercent
+//                    ]
+//                ]);
+
+        }
+
+        return response()->json([
+            'msg' => 'If you are a valid user, your password has been reset. Please contact your CloudBox provider to get the new password.'
+        ]);
+    }
+
+    function generatePassword($length = 8)
+    {
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < $length; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
     }
 }

@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 class HomeController extends Controller
 {
 
+    // basic layout page
     public function index()
     {
         $user = session('username');

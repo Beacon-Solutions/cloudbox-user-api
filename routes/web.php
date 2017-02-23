@@ -35,6 +35,8 @@ Route::post('/users/update/', ['uses' => 'UserController@updateUser']);
 
 Route::get('/users/profile', ['uses' => 'UserController@profile']);
 
+Route::post('/users/reset/password', ['uses' => 'UserController@resetPassword']);
+
 Route::post('/users/update/profile', ['uses' => 'UserController@updateProfile']);
 
 Route::post('instance/create', ['uses' => 'InstanceController@createInstance']);

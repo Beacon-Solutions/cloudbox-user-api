@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 class DashboardController extends Controller
 {
+
+    // returns overview ajax part
     public function overview()
     {
 
@@ -16,6 +18,7 @@ class DashboardController extends Controller
         return view('dashboard.overview', ['all_running_apps' => $all_running_apps]);
     }
 
+    // returns user applications ajax part
     public function appsUser()
     {
 
@@ -41,6 +44,7 @@ class DashboardController extends Controller
         return view('dashboard.apps.user', ['available_user_apps' => $available_user_apps]);
     }
 
+    // returns admin applications ajax part
     public function appsAdmin()
     {
         $all_user_apps = \DB::table('user_app')
@@ -65,10 +69,34 @@ class DashboardController extends Controller
         return view('dashboard.apps.admin', ['available_admin_apps' => $available_admin_apps]);
     }
 
+    // returns users list  ajax part
     public function users()
     {
         $all_users = \DB::table('user') -> get();
 
         return view('dashboard.users', ['all_users' => $all_users]);
+    }
+
+    public function message(){
+
+        $endPointProvider = 'http://104.236.82.72/';
+
+        $client = new \GuzzleHttp\Client();
+
+
+        $res = $client->get($endPointProvider . 'clients/getMessage/2');
+
+        return $res->getBody();
+    }
+
+    public function getGlobalNews(){
+        $endPointProvider = 'http://104.236.82.72/';
+
+        $client = new \GuzzleHttp\Client();
+
+
+        $res = $client->get($endPointProvider . 'getGlobalNews');
+
+        return $res->getBody();
     }
 }

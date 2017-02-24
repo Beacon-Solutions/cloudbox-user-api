@@ -17,7 +17,7 @@
     <div class="col-sm-6 placeholder">
         <div class="panel panel-info">
             <div class="panel-heading">CloudBox News</div>
-            <div class="panel-body">
+            <div id="messageGlobal" class="panel-body">
                 Failed to connect with CloudBox server.
             </div>
         </div>
@@ -25,10 +25,17 @@
     <div class="col-sm-6 placeholder">
         <div class="panel panel-warning">
             <div class="panel-heading">Messages</div>
-            <div class="panel-body">
+            <div id="messageProvider" class="panel-body">
                 No new messages.
             </div>
         </div>
     </div>
 </div>
 
+
+<script>
+
+    $("#messageGlobal").load("{{url('/dashboard/global/news')}}");
+    $("#messageProvider").load("{{url('/dashboard/message')}}");
+
+</script>

@@ -45,7 +45,11 @@
                         <div class="form-group">
                             <div class="col-lg-10 col-lg-offset-2">
                                 <button type="submit" class="btn btn-primary" name="_submit">Login</button>
+                                <button id="forgotPassword" type="button" class="btn btn-warning"
+                                        name="forgot_password">Forgot Password
+                                </button>
                             </div>
+
                         </div>
                         @if (isset($error) && $error == true)
                             <div class="alert alert-dismissible alert-danger">
@@ -61,13 +65,79 @@
         <div class="col-md-4">
         </div>
     </div>
+
 </div>
 
+<div class="modal fade" id="modelForgotPassword" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">WARNING : You Are About To Reset Your Password</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="formForgotPassword">
+                    <fieldset>
+
+                        <div id="recoverInputGroup" class="form-group">
+                            <label for="inputUsername" class="col-lg-2 control-label">Username</label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-control" id="inputUsernameReset" placeholder="Username"
+                                       name="recover_username" autocomplete="off" value="" required>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="csrfToken" name="_token" value="{{ csrf_token() }}"/>
+                        <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">
+                                <button id="resetPassword" type="button" class="btn btn-danger" name="reset_password">
+                                    Reset Password
+                                </button>
+                            </div>
+                        </div>
+                        <div id="passwordResetInfo" class="alert alert-dismissible alert-success text-center" hidden>
+                            <strong id="passwordResetInfoMsg"></strong>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="js/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="js/bootstrap.min.js"></script>
+
+<script>
+    $('#forgotPassword').click(function () {
+        $('#modelForgotPassword').modal('show');
+    });
+
+    $('#resetPassword').click(function () {
+
+        if ($.trim($('#inputUsernameReset').val()) == '') {
+            $('#recoverInputGroup').addClass('has-error');
+            return;
+        }
+
+        $('#recoverInputGroup').removeClass('has-error');
+
+        $.post("{{url('/users/reset/password')}}",
+                $('#formForgotPassword').serialize(),
+                function (data, status) {
+                    $('#passwordResetInfoMsg').text(data['msg']);
+                    $('#passwordResetInfo').show();
+                    setTimeout(function () {
+                        $('#modelForgotPassword').modal('hide');
+                        location.reload();
+                    }, 10000);
+                })
+    });
+</script>
+
 <script src="js/custom.js"></script>
 
 

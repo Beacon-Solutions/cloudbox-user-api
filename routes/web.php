@@ -31,9 +31,15 @@ Route::post('/users/add', ['uses' => 'UserController@addUser']);
 
 Route::get('/users/get/{id}', ['uses' => 'UserController@getUser']);
 
+Route::get('/dashboard/message', ['uses' => 'DashboardController@message']);
+
+Route::get('/dashboard/global/news', ['uses' => 'DashboardController@getGlobalNews']);
+
 Route::post('/users/update/', ['uses' => 'UserController@updateUser']);
 
 Route::get('/users/profile', ['uses' => 'UserController@profile']);
+
+Route::post('/users/reset/password', ['uses' => 'UserController@resetPassword']);
 
 Route::post('/users/update/profile', ['uses' => 'UserController@updateProfile']);
 

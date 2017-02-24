@@ -32,7 +32,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#" id="navbar-user"> {{$session_data['full_name']}}</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="help.pdf" target="_blank">Help</a></li>
                 <li><a id="view-profile" href="{{url('/users/profile')}}">Profile</a></li>
                 <li><a href="{{url('logout')}}">Logout</a></li>
             </ul>

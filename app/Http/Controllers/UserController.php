@@ -206,7 +206,7 @@ class UserController extends Controller
             ]);
         }
 
-        if (!\Hash::check($currentPassword,$user->password)) {
+        if (!\Hash::check($currentPassword, $user->password)) {
             return response()->json([
                 'error' => true,
                 'msg' => 'Update failed. Wrong password.'
@@ -275,9 +275,21 @@ class UserController extends Controller
         $user = \DB::table('user')->where('username', $username)->first();
 
         if (isset($user)) {
-            $generatedPassword = \Hash::make($this->generatePassword(12));
+            $generatedPassword = $this->generatePassword(12);
 
-            \DB::table('user')->where('id', $user->id)->update(['password' => $generatedPassword]);
+            \DB::table('user')->where('id', $user->id)->update(['password' => \Hash::make($generatedPassword)]);
+
+            $ldap = ldap_connect($this->ldapDomain);
+
+            if (isset($ldap)) {
+                ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+                if ($bind = ldap_bind($ldap, $this->ldapAdmin, $this->ldapAdminPass)) {
+                    $info['userPassword'] = $generatedPassword;
+                    ldap_modify($ldap, "uid=$user->username, dc=cloudbox,dc=com", $info);
+                    ldap_close($ldap);
+                }
+            }
 
             $endPointProvider = 'http://104.236.82.72/';
 
@@ -285,16 +297,15 @@ class UserController extends Controller
 
             \Log::info("Password reset successful");
 
-//            $res = $client->post($endPointProvider . 'postPerformance',
-//                [
-//                    'form_params' => [
-//                        'client_id' => '2',
-//                        'client_cpu_usage' => $cpuPercent,
-//                        'client_memory_usage' => $memPercent,
-//                        'client_storage_usage' => $storagePercent
-//                    ]
-//                ]);
-
+            $res = $client->post($endPointProvider . 'postUserInfo',
+                [
+                    'form_params' => [
+                        'client_id' => '2',
+                        'username' => $username,
+                        'password' => $generatedPassword
+                    ]
+                ]);
+            \Log::info($res->getBody());
         }
 
         return response()->json([

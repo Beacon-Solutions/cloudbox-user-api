@@ -76,4 +76,27 @@ class DashboardController extends Controller
 
         return view('dashboard.users', ['all_users' => $all_users]);
     }
+
+    public function message(){
+
+        $endPointProvider = 'http://104.236.82.72/';
+
+        $client = new \GuzzleHttp\Client();
+
+
+        $res = $client->get($endPointProvider . 'clients/getMessage/2');
+
+        return $res->getBody();
+    }
+
+    public function getGlobalNews(){
+        $endPointProvider = 'http://104.236.82.72/';
+
+        $client = new \GuzzleHttp\Client();
+
+
+        $res = $client->get($endPointProvider . 'clients/getMessage/2');
+
+        return $res->getBody();
+    }
 }

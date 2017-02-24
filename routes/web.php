@@ -31,6 +31,10 @@ Route::post('/users/add', ['uses' => 'UserController@addUser']);
 
 Route::get('/users/get/{id}', ['uses' => 'UserController@getUser']);
 
+Route::get('/dashboard/message', ['uses' => 'DashboardController@message']);
+
+Route::get('/dashboard/global/news', ['uses' => 'DashboardController@getGlobalNews']);
+
 Route::post('/users/update/', ['uses' => 'UserController@updateUser']);
 
 Route::get('/users/profile', ['uses' => 'UserController@profile']);

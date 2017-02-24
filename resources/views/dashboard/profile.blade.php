@@ -26,7 +26,7 @@
                             <div class="form-group">
                                 <label for="inputCurrentPassword" class="col-lg-2 control-label">Current Password</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="inputCurrentPassword" placeholder="Current Password"
+                                    <input type="password" class="form-control" id="inputCurrentPassword" placeholder="Current Password"
                                            name="current_password" autocomplete="off" value="">
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                             <div class="form-group">
                                 <label for="inputNewPassword" class="col-lg-2 control-label">New Password</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="inputNewPassword" placeholder="New Password"
+                                    <input type="password" class="form-control" id="inputNewPassword" placeholder="New Password"
                                            name="new_password" autocomplete="off" value="">
                                 </div>
                             </div>
@@ -42,7 +42,7 @@
                             <div class="form-group">
                                 <label for="inputConfirmNewPassword" class="col-lg-2 control-label">Confirm New Password</label>
                                 <div class="col-lg-10">
-                                    <input type="text" class="form-control" id="inputConfirmNewPassword" placeholder="Confirm New Password"
+                                    <input type="password" class="form-control" id="inputConfirmNewPassword" placeholder="Confirm New Password"
                                            name="confirm_new_password" autocomplete="off" value="">
                                 </div>
                             </div>

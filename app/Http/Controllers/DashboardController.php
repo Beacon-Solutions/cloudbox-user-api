@@ -95,7 +95,7 @@ class DashboardController extends Controller
         $client = new \GuzzleHttp\Client();
 
 
-        $res = $client->get($endPointProvider . 'clients/getMessage/2');
+        $res = $client->get($endPointProvider . 'getGlobalNews');
 
         return $res->getBody();
     }

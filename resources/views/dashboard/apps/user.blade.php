@@ -23,20 +23,20 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12 placeholder">
-        <div class="panel panel-danger">
-            <div class="panel-heading">Danger Zone</div>
-            <div class="panel-body">
-                <div class="list-group">
-                    <div class="list-group-item">
-                        <h4 class="list-group-item-heading">Business Bloggers</h4>
-                        <p class="list-group-item-text">Keep update with your next challenge</p>
-                        <a href="#" class="btn btn-danger app-action-btn">Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    {{--<div class="col-sm-12 placeholder">--}}
+        {{--<div class="panel panel-danger">--}}
+            {{--<div class="panel-heading">Danger Zone</div>--}}
+            {{--<div class="panel-body">--}}
+                {{--<div class="list-group">--}}
+                    {{--<div class="list-group-item">--}}
+                        {{--<h4 class="list-group-item-heading">Business Bloggers</h4>--}}
+                        {{--<p class="list-group-item-text">Keep update with your next challenge</p>--}}
+                        {{--<a href="#" class="btn btn-danger app-action-btn">Delete</a>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
 
     <script>
         $('a.btn-app-launch').click(function () {

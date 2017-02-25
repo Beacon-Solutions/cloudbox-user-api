@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CloudBox Login</title>
+    <title>Beacon Solutions Login</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -22,7 +22,7 @@
         <div class="col-md-4">
         </div>
         <div class="col-md-4 main">
-            <h1 class="text-center">CloudBox</h1>
+            <h1 class="text-center">Beacon Solutions</h1>
             <div class="well bs-component shadow-well">
                 <form class="form-horizontal" method="POST" action="{{url('login')}}">
                     <fieldset>
